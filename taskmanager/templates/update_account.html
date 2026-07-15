@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="content-section">
+        <h3 class="border-bottom pb-2 mb-4">Update Account</h3>
+
+        <!-- Profile Picture -->
+        <div class="mb-4">
+            <div class="d-flex align-items-center mb-3">
+                <img class="rounded-circle mr-3"
+                     src="{{ url_for('static', filename='profile_pics/' + current_user.image_file) }}"
+                     alt="Profile Picture"
+                     style="width: 60px; height: 60px; object-fit: cover;">
+                <div>
+                    <strong>Profile Picture</strong>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem;">JPG, JPEG or PNG only</p>
+                </div>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="d-flex align-items-center">
+                    {{ form.image_file(class="form-control-file mr-3") }}
+                    {{ form.submit(class="btn btn-outline-secondary btn-sm") }}
+                </div>
+                {% if form.image_file.errors %}
+                    {% for error in form.image_file.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                {% endif %}
+            </form>
+        </div>
+
+        <hr class="mb-4">
+
+        <!-- Change Email -->
+        <div class="mb-3">
+            <a href="{{ url_for('change_email') }}" class="d-flex align-items-center justify-content-between p-3 border rounded text-dark"
+               style="text-decoration: none; background-color: #f8f9fa;">
+                <div>
+                    <strong>Change Email</strong>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem;">Update your email address</p>
+                </div>
+                <span>&rsaquo;</span>
+            </a>
+        </div>
+
+        <!-- Change Password -->
+        <div>
+            <a href="{{ url_for('change_password') }}" class="d-flex align-items-center justify-content-between p-3 border rounded text-dark"
+               style="text-decoration: none; background-color: #f8f9fa;">
+                <div>
+                    <strong>Change Password</strong>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem;">Update your account password</p>
+                </div>
+                <span>&rsaquo;</span>
+            </a>
+        </div>
+    </div>
+
+{% endblock content %}

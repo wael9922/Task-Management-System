@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<form method="post">
+  {{ form.hidden_tag() }}
+  <fieldset class="form-group">
+    <legend class="border-bottom mb-4">{{ legend }}</legend>
+  <div class="form-group">
+    {{ form.title.label(class="form-control-label") }}
+    {% if form.title.errors %}
+        {{ form.title(class="form-control form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+            {% for error in form.title.errors %}
+                <span>{{ error }}</span>  <!-- e.g "Field is required" -->
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form.title(class="form-control form-control-lg") }}
+    {% endif %}
+  </div>
+    <div class="form-group">
+    {{ form.details.label(class="form-control-label") }}
+    {% if form.details.errors %}
+        {{ form.details(class="form-control form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+            {% for error in form.details.errors %}
+                <span>{{ error }}</span>  <!-- e.g "Field is required" -->
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form.details(class="form-control form-control-lg") }}
+    {% endif %}
+  </div>
+
+      <div class="form-group">
+    {{ form.assigned_to.label(class="form-control-label") }}
+    {% if form.assigned_to.errors %}
+        {{ form.assigned_to(class="form-control form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+            {% for error in form.assigned_to.errors %}
+                <span>{{ error }}</span>  <!-- e.g "Field is required" -->
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form.assigned_to(class="form-control form-control-lg") }}
+          <small class="form-text text-muted">
+            {{ form.assigned_to.description }}
+          </small>
+    {% endif %}
+  </div>
+        <div class="form-group">
+    {{ form.deadline.label(class="form-control-label") }}
+    {% if form.deadline.errors %}
+        {{ form.deadline(class="form-control form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+            {% for error in form.deadline.errors %}
+                <span>{{ error }}</span>  <!-- e.g "Field is required" -->
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form.deadline(class="form-control form-control-lg") }}
+    {% endif %}
+  </div>
+  <div class="form-group">
+    {{ form.status.label(class="form-control-label") }}
+    {% if form.status.errors %}
+        {{ form.status(class="form-control form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+            {% for error in form.status.errors %}
+                <span>{{ error }}</span>  <!-- e.g "Field is required" -->
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form.status(class="form-control form-control-lg") }}
+    {% endif %}
+  </div>
+  </fieldset>
+  <div class="form-group">
+      {{ form.submit(class="btn btn-outline-info") }}
+  </div>
+</form>
+
+{% endblock content %}

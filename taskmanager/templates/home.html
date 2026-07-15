@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <!-- Filter Buttons -->
+    <div class="mb-4">
+        <div class="mb-1">
+            <small class="text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">View</small>
+        </div>
+        <div class="btn-group btn-group-sm mr-2" role="group">
+            {% if filter_by == 'all' and status == 'all' %}
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">All</a>
+            {% else %}
+                <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">All</a>
+            {% endif %}
+
+            {% if filter_by == 'created_by_me' %}
+                <a href="{{ url_for('home', filter_by='created_by_me', by_status=status) }}" class="btn btn-secondary">Created by me</a>
+                <a href="{{ url_for('home', filter_by='assigned_to_me', by_status=status) }}" class="btn btn-outline-secondary">Assigned to me</a>
+            {% elif filter_by == 'assigned_to_me' %}
+                <a href="{{ url_for('home', filter_by='created_by_me', by_status=status) }}" class="btn btn-outline-secondary">Created by me</a>
+                <a href="{{ url_for('home', filter_by='assigned_to_me', by_status=status) }}" class="btn btn-secondary">Assigned to me</a>
+            {% else %}
+                <a href="{{ url_for('home', filter_by='created_by_me', by_status=status) }}" class="btn btn-outline-secondary">Created by me</a>
+                <a href="{{ url_for('home', filter_by='assigned_to_me', by_status=status) }}" class="btn btn-outline-secondary">Assigned to me</a>
+            {% endif %}
+        </div>
+
+        <div class="btn-group btn-group-sm" role="group">
+            {% if status == 'pending' %}
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='pending') }}" class="btn btn-secondary">Pending</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='in_progress') }}" class="btn btn-outline-secondary">In Progress</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='completed') }}" class="btn btn-outline-secondary">Completed</a>
+            {% elif status == 'in_progress' %}
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='pending') }}" class="btn btn-outline-secondary">Pending</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='in_progress') }}" class="btn btn-secondary">In Progress</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='completed') }}" class="btn btn-outline-secondary">Completed</a>
+            {% elif status == 'completed' %}
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='pending') }}" class="btn btn-outline-secondary">Pending</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='in_progress') }}" class="btn btn-outline-secondary">In Progress</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='completed') }}" class="btn btn-secondary">Completed</a>
+            {% else %}
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='pending') }}" class="btn btn-outline-secondary">Pending</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='in_progress') }}" class="btn btn-outline-secondary">In Progress</a>
+                <a href="{{ url_for('home', filter_by=filter_by, by_status='completed') }}" class="btn btn-outline-secondary">Completed</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Task List -->
+    {% for task in tasks.items %}
+    <article class="media content-section">
+        <img class="rounded-circle article-img"
+             src="{{ url_for('static', filename='profile_pics/' + task.task_creator.image_file) }}"
+             alt="{{ task.task_creator.username }}">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="#">{{ task.task_creator.username }}</a>
+                {% if task.deadline is none %}
+                    <small class="text-muted">No Deadline</small>
+                {% else %}
+                    <small class="text-muted">{{ task.deadline.strftime('%y-%m-%d') }}</small>
+                {% endif %}
+                <small class="text-muted ml-2">Assignee: {{ task.task_assignee.username }}</small>
+            </div>
+            <h2 class="article-title">
+                <a href="{{ url_for('task', task_id=task.id) }}" style="color: #212529;">{{ task.title }}</a>
+            </h2>
+            <div class="mb-1">
+                {% if task.status == 'Pending' %}
+                    <span class="badge badge-warning">{{ task.status }}</span>
+                {% elif task.status == 'In Progress' %}
+                <span class="badge badge-primary">{{ task.status }}</span>
+                {% elif task.status == 'Completed' %}
+                  <span class="badge badge-success">{{ task.status }}</span>
+                {% endif %}
+
+                {% if task.deadline and today > task.deadline %}
+                    <span class="badge badge-danger ml-1">Overdue</span>
+                {% endif %}
+                {% if task.task_creator == current_user %}
+                    <span class="badge badge-secondary ml-1">Created by you</span>
+                {% else %}
+                    <span class="badge badge-secondary ml-1">Assigned to you</span>
+                {% endif %}
+            </div>
+            <p class="article-content">{{ task.details }}</p>
+        </div>
+    </article>
+    {% endfor %}
+
+    <!-- Pagination -->
+    <div class="container">
+        <div class="d-flex justify-content-between mt-3 px-4">
+            <div>
+                {% if tasks.has_prev %}
+                    <a href="{{ url_for('home', filter_by=filter_by, page=tasks.prev_num) }}" class="btn btn-outline-info btn-sm">&laquo; Previous</a>
+                {% endif %}
+            </div>
+            <div>
+                {% if tasks.has_next %}
+                    <a href="{{ url_for('home', filter_by=filter_by, page=tasks.next_num) }}" class="btn btn-outline-info btn-sm">&raquo; Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% block content %}
+<article class="media content-section">
+    <img class="rounded-circle article-img"
+         src="{{ url_for('static', filename='profile_pics/' + task.task_creator.image_file) }}"
+         alt="{{ task.task_creator.username }}">
+    <div class="media-body">
+
+        <div class="article-metadata">
+            <span class="mr-2">Created by
+                <a href="#">{{ task.task_creator.username }}</a>
+            </span>
+            {% if task.deadline %}
+                <small class="text-muted">Deadline: {{ task.deadline.strftime('%Y-%m-%d') }}</small>
+            {% else %}
+                <small class="text-muted">No deadline set</small>
+            {% endif %}
+        </div>
+
+        <h2 class="article-title">{{ task.title }}</h2>
+
+        <div class="mb-2">
+            {% if task.status == "Pending" %}
+                <span class="badge badge-warning">Pending</span>
+            {% elif task.status == "In Progress" %}
+                <span class="badge badge-primary">In Progress</span>
+            {% elif task.status == "Completed" %}
+                <span class="badge badge-success">Completed</span>
+            {% endif %}
+
+            {% if task.deadline and task.deadline < today and task.status != "Completed" %}
+                <span class="badge badge-danger ml-1">Overdue</span>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+            <strong>Assigned to:</strong>
+            <span>{{ task.task_assignee.username }}</span>
+            {% if task.task_assignee.id == current_user.id %}
+                <small class="text-muted">(you)</small>
+            {% endif %}
+        </div>
+
+        {% if task.details %}
+            <p class="article-content">{{ task.details }}</p>
+        {% else %}
+            <p class="text-muted">No details provided.</p>
+        {% endif %}
+
+        <hr>
+
+        <div class="d-flex align-items-center">
+
+            {% if task.task_creator.id == current_user.id %}
+                <a class="btn btn-secondary btn-sm mt-1 mb-1 mr-2"
+                   href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+
+                <button type="button"
+                        class="btn btn-danger btn-sm m-1"
+                        data-toggle="modal"
+                        data-target="#deleteModal">
+                    Delete
+                </button>
+            {% endif %}
+
+            {% if task.task_creator.id == current_user.id or task.task_assignee.id == current_user.id %}
+                {% if task.status != "Completed" %}
+                    <form action="{{ url_for('update_task_status', task_id=task.id) }}" method="POST" class="ml-2">
+                        {{ form.hidden_tag() }}
+                        {% if task.status == "Pending" %}
+                            <input type="hidden" name="status" value="In Progress">
+                            <button type="submit" class="btn btn-primary btn-sm mt-1 mb-1">
+                                Mark as In Progress
+                            </button>
+                        {% elif task.status == "In Progress" %}
+                            <input type="hidden" name="status" value="Completed">
+                            <button type="submit" class="btn btn-success btn-sm mt-1 mb-1">
+                                Mark as Completed
+                            </button>
+                        {% endif %}
+                    </form>
+                {% endif %}
+            {% endif %}
+
+        </div>
+
+    </div>
+</article>
+
+<!-- Delete Modal -->
+{% if task.task_creator == current_user %}
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Task?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong>{{ task.title }}</strong>? This cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST">
+                    {{ form.hidden_tag() }}
+                    <input class="btn btn-danger" type="submit" value="Delete">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
