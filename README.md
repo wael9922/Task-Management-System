@@ -7,31 +7,31 @@ A Flask-based task management application with both a web interface and a REST A
 ## Screenshots
 ### Dashboard
 
-![Dashboard](screenshots/my_account.png)
+![Dashboard](Screenshots/my_account.png)
 
 ---
 
 ### Tasks List
 
-![Tasks List](screenshots/tasks.png)
+![Tasks List](Screenshots/tasks.png)
 
 ---
 
 ### Task Details
 
-![Task Details](screenshots/task.png)
+![Task Details](Screenshots/task.png)
 
 ---
 
 ### Filter Tasks by Status
 
-![Filtered Tasks](screenshots/filterd_tasks.png)
+![Filtered Tasks](Screenshots/filterd_tasks.png)
 
 ---
 
 ### Update Account
 
-![Update Account](screenshots/update_account.png)
+![Update Account](Screenshots/update_account.png)
 
 ---
 
@@ -45,7 +45,7 @@ A Flask-based task management application with both a web interface and a REST A
 
 Authenticate using your email and password to receive a JWT access token.
 
-![API Login](screenshots/api_login.png)
+![API Login](Screenshots/api_login.png)
 
 ---
 
@@ -53,7 +53,7 @@ Authenticate using your email and password to receive a JWT access token.
 
 Retrieve all tasks using a valid JWT Bearer token.
 
-![Get Tasks](screenshots/get_tasks.png)
+![Get Tasks](Screenshots/get_tasks.png)
 
 ---
 
@@ -61,7 +61,7 @@ Retrieve all tasks using a valid JWT Bearer token.
 
 Create a new task through the REST API.
 
-![Create Task](screenshots/post_task.png)
+![Create Task](Screenshots/post_task.png)
 
 ---
 ## Features
