@@ -111,7 +111,7 @@ Create a new task through the REST API.
 - 
 ### Entity Relationship Diagram (ERD)
 
-![ER Diagram](screenshots/ER.png)
+![ER Diagram](Screenshots/ER.png)
 
 ---
 ## Recent Activities
